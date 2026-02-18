@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tpl-deploy"
+version = "0.1.2"
+description = "tpl CLI placeholder"
+authors = [{ name="Alexandru Croicu", email="cacroi18@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+tpl-deploy = "tpl_deploy.cli:main"
+tpldeploy = "tpl_deploy.cli:main"
+tplpy = "tpl_deploy.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
