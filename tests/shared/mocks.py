@@ -44,6 +44,7 @@ class MockLauncher(protocols.LauncherAgent):
         self._dest_dir = dest_dir
         self._command = command
 
+
 class TestLogger(protocols.LogSink):
     def __init__(self):
         self._pending: list[protocols.TelemetryRecord] = []
@@ -52,6 +53,7 @@ class TestLogger(protocols.LogSink):
 
     def log(self, level: protocols.TelemetryLevel, message: str) -> protocols.TelemetryRecord:
         from datetime import datetime, timezone
+
         record = protocols.TelemetryRecord(
             timestamp=datetime.now(timezone.utc),
             level=level,

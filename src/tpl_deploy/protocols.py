@@ -42,6 +42,7 @@ class Response(Protocol):
 
     def raise_for_status(self) -> None: ...
 
+
 class Transport(Protocol):
     def get(
         self,
@@ -58,10 +59,12 @@ class Transport(Protocol):
         inject_truststore: bool = True,
     ) -> Response: ...
 
+
 class RemoteReference(Protocol):
     name: str
     url: str
     inject_truststore: bool
+
 
 class Remote(Protocol):
     def fetch(self) -> bool: ...
@@ -75,17 +78,20 @@ class Remote(Protocol):
     @staticmethod
     def set_transport(transport: Transport) -> None: ...
 
+
 class Project(Protocol):
     @staticmethod
     def create(
-            project_name: str,
-            dest: pathlib.Path,
-            asset: "Asset",
-            params: list[str] | None,
+        project_name: str,
+        dest: pathlib.Path,
+        asset: "Asset",
+        params: list[str] | None,
     ) -> "Project": ...
+
 
 class LauncherAgent(Protocol):
     def launch(self, dest_dir: pathlib.Path, command: str) -> None: ...
+
 
 class LogSink(Protocol):
     def log(self, level: TelemetryLevel, message: str) -> TelemetryRecord: ...

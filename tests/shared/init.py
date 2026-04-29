@@ -15,7 +15,7 @@ class SharedFixtures:
 
         transport: protocols.Transport = HttpBouncer(test_dir)
         HttpRemote.set_transport(transport)
-    
+
     @staticmethod
     def teardown():
         HttpRemote.set_transport(None)

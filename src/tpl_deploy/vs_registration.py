@@ -81,6 +81,7 @@ def _reset() -> None:
 
 # Providers
 
+
 class _SystemProvider:
     def get_info(self) -> tuple[pathlib.Path, pathlib.Path] | None:
         if sys.platform != "win32":
@@ -95,6 +96,7 @@ class _NullProvider:
 
 def _compute_vs_info() -> tuple[pathlib.Path, pathlib.Path] | None:
     import os
+
     pf86 = os.environ.get("ProgramFiles(x86)", "C:\\Program Files (x86)")
     vswhere = pathlib.Path(pf86) / "Microsoft Visual Studio" / "Installer" / "vswhere.exe"
 
@@ -103,9 +105,16 @@ def _compute_vs_info() -> tuple[pathlib.Path, pathlib.Path] | None:
 
     try:
         output = subprocess.check_output(
-            [str(vswhere), "-latest", "-products", "*",
-             "-requires", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
-             "-format", "json"],
+            [
+                str(vswhere),
+                "-latest",
+                "-products",
+                "*",
+                "-requires",
+                "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+                "-format",
+                "json",
+            ],
             text=True,
         )
         data = json.loads(output)
@@ -147,6 +156,7 @@ def _compute_vs_info() -> tuple[pathlib.Path, pathlib.Path] | None:
 def _get_documents_folder() -> pathlib.Path | None:
     import ctypes
     from ctypes import wintypes
+
     buf = ctypes.create_unicode_buffer(wintypes.MAX_PATH)
     if ctypes.windll.shell32.SHGetFolderPathW(0, 5, 0, 0, buf) != 0:
         return None

@@ -20,7 +20,6 @@ class TestRemoteInfo:
         assert r.type == "http"
 
 
-
 class TestGetCurrentOs:
     def test_windows(self):
         with patch("tpl_deploy.settings.sys") as mock_sys:
@@ -49,40 +48,63 @@ class TestGetRemotes:
         assert Settings.get_remotes() is None
 
     def test_returns_remotes(self):
-        Settings._settings = {"remotes": [
-            {"name": "r", "url": "https://example.com/manifest.json",
-             "inject_truststore": False}
-        ]}
+        Settings._settings = {
+            "remotes": [
+                {
+                    "name": "r",
+                    "url": "https://example.com/manifest.json",
+                    "inject_truststore": False,
+                }
+            ]
+        }
         remotes = Settings.get_remotes()
         assert remotes is not None
         assert len(remotes) == 1
         assert remotes[0].name == "r"
 
     def test_returns_multiple_remotes(self):
-        Settings._settings = {"remotes": [
-            {"name": "a", "url": "https://a.example.com/manifest.json",
-             "inject_truststore": False},
-            {"name": "b", "url": "https://b.example.com/manifest.json",
-             "inject_truststore": False},
-        ]}
+        Settings._settings = {
+            "remotes": [
+                {
+                    "name": "a",
+                    "url": "https://a.example.com/manifest.json",
+                    "inject_truststore": False,
+                },
+                {
+                    "name": "b",
+                    "url": "https://b.example.com/manifest.json",
+                    "inject_truststore": False,
+                },
+            ]
+        }
         assert len(Settings.get_remotes()) == 2
 
 
 class TestGetRemote:
     def test_found(self):
-        Settings._settings = {"remotes": [
-            {"name": "r", "url": "https://example.com/manifest.json",
-             "inject_truststore": False}
-        ]}
+        Settings._settings = {
+            "remotes": [
+                {
+                    "name": "r",
+                    "url": "https://example.com/manifest.json",
+                    "inject_truststore": False,
+                }
+            ]
+        }
         remote = Settings.get_remote("r")
         assert remote is not None
         assert remote.name == "r"
 
     def test_not_found(self):
-        Settings._settings = {"remotes": [
-            {"name": "r", "url": "https://example.com/manifest.json",
-             "inject_truststore": False}
-        ]}
+        Settings._settings = {
+            "remotes": [
+                {
+                    "name": "r",
+                    "url": "https://example.com/manifest.json",
+                    "inject_truststore": False,
+                }
+            ]
+        }
         assert Settings.get_remote("unknown") is None
 
     def test_returns_none_when_no_remotes(self):

@@ -35,7 +35,7 @@ class HttpResponse(protocols.Response):
 
     def json(self):
         return self._response.json()
-    
+
     def raise_for_status(self):
         self._response.raise_for_status()
 
@@ -50,9 +50,7 @@ class HttpTransport(protocols.Transport):
         inject_truststore: bool = True,
     ) -> protocols.Response:
         try:
-            headers = {
-                "User-Agent": "Mozilla/5.0 (compatible; TPLDeploy/1.0)"
-            }
+            headers = {"User-Agent": "Mozilla/5.0 (compatible; TPLDeploy/1.0)"}
 
             if request_headers is not None:
                 request_headers = {**headers, **request_headers}
@@ -74,8 +72,9 @@ class HttpTransport(protocols.Transport):
 
         except requests.exceptions.RequestException as e:
             raise error.RemoteConnectionError(
-                f"Failed to connect to endpoint {request_url}: {e}") from e
-        
+                f"Failed to connect to endpoint {request_url}: {e}"
+            ) from e
+
         return resp
 
     def get_if_modified(
@@ -143,7 +142,7 @@ class HttpRemote(protocols.Remote):
 
         if not self._fetch_assets():
             return False
-        
+
         return True
 
     def load(self) -> bool:
@@ -151,10 +150,10 @@ class HttpRemote(protocols.Remote):
             if not self._load_manifest():
                 if not self.fetch():
                     return False
-                
+
             if self._manifest is None:
                 return False
-            
+
             self._loaded = True
 
         return True
@@ -188,7 +187,7 @@ class HttpRemote(protocols.Remote):
     @property
     def name(self) -> str:
         return self._name
-    
+
     # Private
 
     def _fetch_manifest(self) -> dict:

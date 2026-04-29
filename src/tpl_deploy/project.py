@@ -20,6 +20,7 @@ class ProjectItem:
     replace_parameters: bool
     open_in_editor: bool
 
+
 class Project:
     def __init__(self, name: str, path: pathlib.Path, asset: Asset):
         self._name = name
@@ -38,20 +39,16 @@ class Project:
 
     @staticmethod
     def create(
-            project_name: str,
-            dest: pathlib.Path,
-            asset: Asset,
-            params: list[str] | None
-        ) -> Project:
+        project_name: str, dest: pathlib.Path, asset: Asset, params: list[str] | None
+    ) -> Project:
 
         project = Project(project_name, dest, asset)
         project._create(params)
 
         return project
 
-               
     # Private
-    
+
     def _create(self, params: list[str] | None) -> None:
         with Settings.scratch_dir() as extract_dir:
             self._asset.extract(extract_dir)
@@ -59,12 +56,12 @@ class Project:
             with Settings.scratch_dir() as staging_dir:
                 values: dict[str, str] = {
                     "safeprojectname": self._name,
-                    "installpath": self._find_vs_installation_path()
+                    "installpath": self._find_vs_installation_path(),
                 }
 
                 if params is not None:
                     for i, param in enumerate(params):
-                        values[f"param{i+1}"] = param
+                        values[f"param{i + 1}"] = param
 
                 Project._replace_recursively(extract_dir, staging_dir, values)
 
@@ -75,9 +72,7 @@ class Project:
 
     @staticmethod
     def _move_to_destination(
-            src: pathlib.Path, 
-            dst: pathlib.Path, 
-            items: list[ProjectItem]
+        src: pathlib.Path, dst: pathlib.Path, items: list[ProjectItem]
     ) -> None:
         if dst.exists():
             raise error.DestinationExistsError(f"Destination already exists: {dst}")
@@ -106,7 +101,7 @@ class Project:
             )
 
         return files[0]
-    
+
     @staticmethod
     def _replace_tokens(src: pathlib.Path, dst: pathlib.Path, values: dict[str, str]) -> None:
         try:
@@ -124,9 +119,7 @@ class Project:
 
     @staticmethod
     def _replace_recursively(
-            extract_dir: pathlib.Path, 
-            staging_dir: pathlib.Path, 
-            values: dict[str, str]
+        extract_dir: pathlib.Path, staging_dir: pathlib.Path, values: dict[str, str]
     ) -> None:
 
         for item in extract_dir.iterdir():
@@ -150,7 +143,7 @@ class Project:
     def _find_vs_installation_path() -> str:
         if sys.platform != "win32":
             return ""
-        
+
         pf86 = os.environ.get("ProgramFiles(x86)", "C:\\Program Files (x86)")
         pf86_dir = pathlib.Path(pf86)
 
@@ -162,9 +155,12 @@ class Project:
         cmd = [
             str(vswhere),
             "-latest",
-            "-products", "*",
-            "-requires", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
-            "-property", "installationPath",
+            "-products",
+            "*",
+            "-requires",
+            "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+            "-property",
+            "installationPath",
         ]
 
         return subprocess.check_output(cmd, text=True).strip() + "\\Common7\\IDE\\"
@@ -182,11 +178,13 @@ class Project:
                 if tag == "Project":
                     source_name = elem.attrib.get("File")
                     target_name = elem.attrib.get("TargetFileName")
-                    items.append(ProjectItem(
-                        source_path=source_name,
-                        target_path=target_name,
-                        replace_parameters=elem.attrib.get("ReplaceParameters", "") == "true",
-                        open_in_editor=elem.attrib.get("OpenInEditor", "") == "true")
+                    items.append(
+                        ProjectItem(
+                            source_path=source_name,
+                            target_path=target_name,
+                            replace_parameters=elem.attrib.get("ReplaceParameters", "") == "true",
+                            open_in_editor=elem.attrib.get("OpenInEditor", "") == "true",
+                        )
                     )
 
                 if tag == "Folder":
@@ -199,11 +197,13 @@ class Project:
                     source_name = (elem.text or "").strip()
                     target_name = elem.attrib.get("TargetFileName") or source_name
 
-                    items.append(ProjectItem(
-                        source_path="/".join([*source_folder_stack, source_name]),
-                        target_path="/".join([*target_folder_stack, target_name]),
-                        replace_parameters=elem.attrib.get("ReplaceParameters", "") == "true",
-                        open_in_editor=elem.attrib.get("OpenInEditor", "") == "true")
+                    items.append(
+                        ProjectItem(
+                            source_path="/".join([*source_folder_stack, source_name]),
+                            target_path="/".join([*target_folder_stack, target_name]),
+                            replace_parameters=elem.attrib.get("ReplaceParameters", "") == "true",
+                            open_in_editor=elem.attrib.get("OpenInEditor", "") == "true",
+                        )
                     )
 
             elif event == "end":

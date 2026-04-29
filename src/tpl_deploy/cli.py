@@ -22,6 +22,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error: {e}", file=sys.stderr)
         return 1
 
+
 VERBS = {
     "new",
     "register",
@@ -98,11 +99,11 @@ params format: key=value  (e.g. arch=x64)\
         formatter_class=_FMT,
         parents=[common],
     )
-    p_new.add_argument("template_name", metavar="target",
-                       help="Alias, template name, or remote:template.")
+    p_new.add_argument(
+        "template_name", metavar="target", help="Alias, template name, or remote:template."
+    )
     p_new.add_argument("project_name", help="Destination folder name (becomes the project name).")
-    p_new.add_argument("params", nargs="*", metavar="key=value",
-                       help="Template parameters.")
+    p_new.add_argument("params", nargs="*", metavar="key=value", help="Template parameters.")
 
     # tpl register <name> <url>
     p_register = subparsers.add_parser(
@@ -117,16 +118,19 @@ If URL is omitted the remote must already exist; the catalog is re-fetched (same
         parents=[common],
     )
     p_register.add_argument("name", help="Short name for this remote (e.g. github).")
-    p_register.add_argument("url", nargs="?", default=None,
-                             help="Manifest URL. Omit to re-fetch an already-registered remote.")
+    p_register.add_argument(
+        "url",
+        nargs="?",
+        default=None,
+        help="Manifest URL. Omit to re-fetch an already-registered remote.",
+    )
 
     # tpl unregister <name>
     p_unregister = subparsers.add_parser(
         "unregister",
         help="Remove a remote catalog.",
         description=(
-            "Remove a registered remote and its cached assets.\n"
-            "At least one remote must remain."
+            "Remove a registered remote and its cached assets.\nAt least one remote must remain."
         ),
         formatter_class=_FMT,
         parents=[common],
@@ -189,7 +193,7 @@ subcommands:
     p_set_default_editor.add_argument(
         "edit_command",
         metavar="command",
-        help='Quoted editor command string.',
+        help="Quoted editor command string.",
     )
 
     # tpl config set-editor <language> <os> "<command>"
@@ -202,10 +206,10 @@ subcommands:
         parents=[common],
     )
     p_set_editor.add_argument("language", help="Language identifier (e.g. cpp, py, cs).")
-    p_set_editor.add_argument("os", choices=OSES,
-                               help=f"OS key. One of: {', '.join(OSES)}.")
-    p_set_editor.add_argument("edit_command", metavar="command",
-                               help="Quoted editor command string.")
+    p_set_editor.add_argument("os", choices=OSES, help=f"OS key. One of: {', '.join(OSES)}.")
+    p_set_editor.add_argument(
+        "edit_command", metavar="command", help="Quoted editor command string."
+    )
 
     # tpl config remove-editor <language> <os>
     p_remove_editor = config_subparsers.add_parser(
@@ -215,8 +219,7 @@ subcommands:
         parents=[common],
     )
     p_remove_editor.add_argument("language", help="Language identifier.")
-    p_remove_editor.add_argument("os", choices=OSES,
-                                  help=f"OS key. One of: {', '.join(OSES)}.")
+    p_remove_editor.add_argument("os", choices=OSES, help=f"OS key. One of: {', '.join(OSES)}.")
 
     # tpl config set-alias <remote> <template_name> <alias>
     p_set_alias = config_subparsers.add_parser(
@@ -281,6 +284,7 @@ def _display_output() -> None:
     for line in Logger.drain():
         Logger.print(line)
 
+
 def _add_default_command(argv: list[str]) -> list[str]:
     if not argv:
         return ["--help"]
@@ -294,6 +298,7 @@ def _add_default_command(argv: list[str]) -> list[str]:
         return ["new", *argv]
 
     return argv
+
 
 if __name__ == "__main__":
     sys.exit(main())
