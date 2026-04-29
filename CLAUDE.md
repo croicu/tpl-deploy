@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Purpose
 
-`tpl` is a deterministic template deployment tool. All behavior is defined by:
+`tpl` is a template deployment tool. All behavior is defined by:
 
 1. `docs/PROTOCOL.md` — authoritative spec
 2. `docs/IMPLEMENTATION.md` — coding constraints
