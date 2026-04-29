@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "editors": {
+    "default": "${code} '${project_dir}'",
+    "groups": {
+      "cpp": {
+        "windows": "${devenv} \"${project_dir}\\${project_name}.vcxproj\""
+      }
+    }
+  },
+  "remotes": [
+    {
+      "name": "default",
+      "url": "http://test.com/tpl-build/manifest.json"
+    }
+  ],
+  "aliases": {
+    "default": {
+      "console": "cpp-console-project"
+    }
+  }
+}

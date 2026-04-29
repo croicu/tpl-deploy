@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "assets": [
+    "cpp-console-project",
+    "cpp-console-linux-project",
+    "cpp-module-project",
+    "cpp-module-linux-project",
+    "cpp-library-project",
+    "cpp-library-linux-project",
+    "cpp-gui-win32-project",
+    "cpp-gui-qt-project",
+    "cpp-gui-gtk-project"
+  ]
+}

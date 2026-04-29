@@ -1,0 +1,63 @@
+{
+    "version": "1",
+    "_globals_": {
+        "enabled": true,
+        "debug": true,
+        "play": true,
+        "record": false,
+        "remote_name": "test",
+        "remote_url": "https://test.com/tpl-build/manifest.json",
+        "expected_result": 0
+    },
+    "integration": {
+        "_globals_": {
+            "defaults": true
+        },
+        "TestCLI":
+        {
+            "test_list": {
+            },
+            "test_register": {
+            },
+            "test_unregister": {},
+            "test_update": {
+                "remote_name": "test"
+            },
+            "test_unregister_last": {
+                "remote_name": "default",
+                "expected_result": 1
+            },
+            "test_config_show": {
+            },
+            "test_config_set_default_editor": { 
+                "command": "TestDefaultEditor ${project_dir}"
+            },
+            "test_config_set_language_editor": { 
+                "language": "py",
+                "os": "windows",
+                "command": "TestPyEditor ${project_dir}"
+            },
+            "test_config_remove_editor": {
+                "language": "py",
+                "os": "windows"
+            },
+            "test_config_set_alias": {
+                "remote_name": "default",
+                "template_name": "cpp.console.project",
+                "alias": "my_console"
+            },
+            "test_config_remove_alias": { 
+                "remote_name": "default",
+                "alias": "my_console"
+            },
+            "test_new": {
+                "remote_name": "default",
+                "template_alias": "console",
+                "project_name": "MyConsole"
+            }
+        }
+    },
+    "unit":
+    {
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "editors": {
+    "default": "${code} --new-window ${project_dir} ${open_file}"
+  },
+  "remotes": [
+    {
+      "name": "github",
+      "url": "https://github.com/croicu/tpl-build/releases/latest/download/manifest.json"
+    }
+  ],
+  "aliases": {
+    "github": {
+      "console": "cpp-console-project"
+    }
+  }
+}
