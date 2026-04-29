@@ -130,7 +130,8 @@ def _compute_vs_info() -> tuple[pathlib.Path, pathlib.Path] | None:
     vs_folder = _VS_VERSION_MAP.get(major)
     if vs_folder is None:
         Logger.warning(
-            f"Visual Studio major version {major} is not supported — skipping template registration."
+            f"Visual Studio major version {major} is not supported — "
+            "skipping template registration."
         )
         return None
 
