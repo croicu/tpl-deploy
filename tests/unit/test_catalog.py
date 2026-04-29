@@ -27,17 +27,13 @@ _REMOTE_B = {
 def _write_catalog(*remotes: dict) -> None:
     catalog_dir = Settings.catalog_dir
     catalog_dir.mkdir(parents=True, exist_ok=True)
-    (catalog_dir / "catalog.json").write_text(
-        json.dumps(list(remotes)), encoding="utf-8"
-    )
+    (catalog_dir / "catalog.json").write_text(json.dumps(list(remotes)), encoding="utf-8")
 
 
 def _write_manifest(remote_name: str, manifest: dict) -> None:
     remote_dir = Settings.catalog_dir / remote_name
     remote_dir.mkdir(parents=True, exist_ok=True)
-    (remote_dir / "manifest.json").write_text(
-        json.dumps(manifest), encoding="utf-8"
-    )
+    (remote_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
 
 
 def _simple_catalog() -> Catalog:
@@ -120,9 +116,7 @@ class TestCatalogSave:
         _write_catalog(_REMOTE_A, _REMOTE_B)
         catalog = Catalog()
         catalog.save()
-        data = json.loads(
-            (Settings.catalog_dir / "catalog.json").read_text(encoding="utf-8")
-        )
+        data = json.loads((Settings.catalog_dir / "catalog.json").read_text(encoding="utf-8"))
         names = [r["name"] for r in data]
         assert "remote-a" in names
         assert "remote-b" in names
@@ -214,5 +208,3 @@ class TestCatalogGetRemoteInfo:
     def test_not_found_returns_none(self):
         catalog = _simple_catalog()
         assert catalog.get_remote_info("unknown") is None
-
-

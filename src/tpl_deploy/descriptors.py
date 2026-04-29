@@ -1,4 +1,3 @@
-
 class classproperty:
     def __init__(self, fget):
         self.fget = fget
@@ -10,6 +9,7 @@ class classproperty:
     def setter(self, fset):
         self.fset = fset
         return self
+
 
 class ClassPropertyMeta(type):
     def __setattr__(cls, name, value):

@@ -37,20 +37,22 @@ def setup_test():
 
 @pytest.fixture(scope="function", autouse=True)
 def suite_run(tmp_path, request):
-    SharedFixtures.setup(request.config.rootpath  / "tests", tmp_path)
+    SharedFixtures.setup(request.config.rootpath / "tests", tmp_path)
 
-    yield # run tests
-    
+    yield  # run tests
+
     SharedFixtures.teardown()
+
 
 @pytest.fixture(scope="session")
 def _all_test_vars() -> dict[str, Any]:
     return load_variables()
+
 
 @pytest.fixture(autouse=True)
 def variables(request: pytest.FixtureRequest, _all_test_vars: dict[str, Any]) -> Variables:
     _variables = init_variables(request, _all_test_vars)
     if _variables.optional("defaults", False):
         Settings.enable_defaults(True)
-        
+
     return _variables

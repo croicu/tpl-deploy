@@ -106,6 +106,7 @@ class TestRegisterTemplates:
         old.write_bytes(b"old")
         new.write_bytes(b"new")
         import time
+
         time.sleep(0.01)
         new.touch()
 

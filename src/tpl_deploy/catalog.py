@@ -25,6 +25,7 @@ class TemplateInfo:
     template_name: str
     remote: RemoteInfo
 
+
 class Catalog:
     def __init__(self):
         # Registry of all remotes, loaded or not
@@ -97,7 +98,8 @@ class Catalog:
 
         if len(self._registry) == 1:
             raise InvalidConfigurationError(
-                "Cannot unregister the last remote. At least one remote must be registered.")
+                "Cannot unregister the last remote. At least one remote must be registered."
+            )
 
         for remote in self._remotes:
             if remote.name == name:
@@ -126,7 +128,6 @@ class Catalog:
             if remote_info.name == name:
                 return remote_info
         return None
-    
 
     def get_remote(self, name: str) -> protocols.Remote | None:
         remote_info = self.get_remote_info(name)
@@ -149,21 +150,22 @@ class Catalog:
         return remote
 
     def create_project(
-            self, 
-            template_info: TemplateInfo, 
-            project_name: str,
-            dest_dir: pathlib.Path, 
-            params: list[str] | None) -> None:
-        
+        self,
+        template_info: TemplateInfo,
+        project_name: str,
+        dest_dir: pathlib.Path,
+        params: list[str] | None,
+    ) -> None:
+
         remote: protocols.Remote | None = self.get_remote(template_info.remote.name)
         if remote is None:
             raise TplValueError(f"Remote '{template_info.remote.name}' not found.")
-        
+
         asset = remote.get_asset(template_info.template_name)
         project = Project.create(project_name, dest_dir, asset, params)
 
         self._launch_editor(template_info.template_name, project_name, dest_dir, project.open_file)
-    
+
     # Private
 
     def _load_info(self) -> bool:
@@ -180,7 +182,8 @@ class Catalog:
                 if not isinstance(registry, list) or len(registry) == 0:
                     raise InvalidConfigurationError(
                         "Config invalid: remotes must be a non-empty list. "
-                        f"Fix {catalog_path} or delete it to re-configure.")
+                        f"Fix {catalog_path} or delete it to re-configure."
+                    )
 
                 _known = {f.name for f in fields(RemoteInfo)}
                 self._registry = [
@@ -190,31 +193,37 @@ class Catalog:
 
         except (json.JSONDecodeError, OSError) as e:
             raise InvalidConfigurationError(
-                f"Config invalid: Fix {catalog_path} or delete it to re-configure.") from e
+                f"Config invalid: Fix {catalog_path} or delete it to re-configure."
+            ) from e
 
         return True
 
     def _setup(self) -> bool:
-        for remote_info in (Settings.get_remotes() or []):
+        for remote_info in Settings.get_remotes() or []:
             self.register_remote(remote_info, False)
 
         if not self._registry:
             raise InvalidConfigurationError(
-                "No remotes configured. Add a remote with 'tpl remote add'.")
+                "No remotes configured. Add a remote with 'tpl remote add'."
+            )
 
         self._remotes = []
         return True
-    
+
     @staticmethod
     def _make_remote(info: RemoteInfo) -> protocols.Remote:
         if info.type == "http" or info.type == "https":
             return HttpRemote(info)
 
         raise UnsupportedRemoteTypeError(f"Unsupported remote type: {info.type}")
-    
 
-    def _launch_editor(self, template_name: str, project_name: str,
-                       dest_dir: pathlib.Path, open_file: pathlib.Path | None = None) -> None:
+    def _launch_editor(
+        self,
+        template_name: str,
+        project_name: str,
+        dest_dir: pathlib.Path,
+        open_file: pathlib.Path | None = None,
+    ) -> None:
         language = template_name.split("-")[0]
 
         os = Settings.get_current_os()

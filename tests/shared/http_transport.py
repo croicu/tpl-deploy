@@ -20,15 +20,19 @@ class HttpBouncer(protocols.Transport):
         HttpRemote.set_transport(self)
 
         return self
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         HttpRemote.set_transport(None)
 
     def get(self, *args, **kwargs) -> protocols.Response:
         raise AssertionError(f"Unexpected call to get(args={args}, kwargs={kwargs})")
+
     def get_if_modified(self, *args, **kwargs) -> protocols.Response:
         raise AssertionError(f"Unexpected call to get_if_modified(args={args}, kwargs={kwargs})")
 
+
 _CHUNK_SIZE = 128
+
 
 class HttpRecorder(protocols.Transport):
     def __init__(self, name: str):
@@ -62,8 +66,8 @@ class HttpRecorder(protocols.Transport):
                         _payload = base64.b64encode(_message[2]).decode("ascii")
                         _chunks: list[str] = []
                         for i in range(0, len(_payload), _CHUNK_SIZE):
-                            _chunks.append(_payload[i:i + _CHUNK_SIZE])
-                            
+                            _chunks.append(_payload[i : i + _CHUNK_SIZE])
+
                         _sessions[_url] = [_status_code, _etag, _chunks]
 
             json.dump(_sessions, f, indent=2)
@@ -108,7 +112,7 @@ class HttpRecorder(protocols.Transport):
 
 
 class ResponsePlayer(protocols.Response):
-    def __init__(self, response : tuple[int, str, bytes]):
+    def __init__(self, response: tuple[int, str, bytes]):
         self._status_code = response[0]
         self._etag = response[1]
         self._content = response[2]
@@ -135,6 +139,7 @@ class ResponsePlayer(protocols.Response):
     def raise_for_status(self):
         if self._status_code >= 400:
             raise requests.exceptions.HTTPError(response=None)
+
 
 class HttpPlayer(protocols.Transport):
     def __init__(self, name: str):
@@ -193,4 +198,3 @@ class HttpPlayer(protocols.Transport):
                 _etag = _message[1]
                 _payload = base64.b64decode("".join(_message[2]))
                 self._messages[_url] = (_status_code, _etag, _payload)
-

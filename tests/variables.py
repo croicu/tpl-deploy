@@ -18,7 +18,7 @@ class Variables:
                 f"[{self._test_id}] missing required key '{key}' in JSON test variables"
             )
         return self._data[key]
-    
+
     def optional(self, key: str, default: Any = None) -> Any:
         return self._data.get(key, default)
 

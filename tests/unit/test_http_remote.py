@@ -40,15 +40,26 @@ class _StubResponse:
         self._content = content
 
     @property
-    def status_code(self): return self._status_code
+    def status_code(self):
+        return self._status_code
+
     @property
-    def reason(self): return "Test"
+    def reason(self):
+        return "Test"
+
     @property
-    def etag(self): return self._etag
+    def etag(self):
+        return self._etag
+
     @property
-    def content(self): return self._content
-    def json(self): return json.loads(self._content) if self._content else None
-    def raise_for_status(self): pass
+    def content(self):
+        return self._content
+
+    def json(self):
+        return json.loads(self._content) if self._content else None
+
+    def raise_for_status(self):
+        pass
 
 
 class _StubTransport:
@@ -72,21 +83,24 @@ class TestHttpTransportGet:
         assert resp.content == b"data"
 
     def test_request_exception_raises_remote_connection_error(self):
-        with patch("tpl_deploy.http_remote.requests.get",
-                   side_effect=requests.exceptions.ConnectionError()):
+        with patch(
+            "tpl_deploy.http_remote.requests.get", side_effect=requests.exceptions.ConnectionError()
+        ):
             with pytest.raises(error.RemoteConnectionError):
                 HttpTransport().get("http://example.com/foo", inject_truststore=False)
 
     def test_ssl_error_inject_disabled_reraises(self):
-        with patch("tpl_deploy.http_remote.requests.get",
-                   side_effect=requests.exceptions.SSLError()):
+        with patch(
+            "tpl_deploy.http_remote.requests.get", side_effect=requests.exceptions.SSLError()
+        ):
             with pytest.raises(requests.exceptions.SSLError):
                 HttpTransport().get("http://example.com/foo", inject_truststore=False)
 
     def test_ssl_error_already_injected_reraises(self):
         HttpTransport._truststore_injected = True
-        with patch("tpl_deploy.http_remote.requests.get",
-                   side_effect=requests.exceptions.SSLError()):
+        with patch(
+            "tpl_deploy.http_remote.requests.get", side_effect=requests.exceptions.SSLError()
+        ):
             with pytest.raises(requests.exceptions.SSLError):
                 HttpTransport().get("http://example.com/foo", inject_truststore=True)
 
@@ -104,9 +118,7 @@ class TestHttpTransportGetIfModified:
     def test_none_etag_omits_header(self):
         mock_resp = _mock_requests_response()
         with patch("tpl_deploy.http_remote.requests.get", return_value=mock_resp) as mock_get:
-            HttpTransport().get_if_modified(
-                "http://example.com/foo", None, inject_truststore=False
-            )
+            HttpTransport().get_if_modified("http://example.com/foo", None, inject_truststore=False)
         headers = mock_get.call_args[1]["headers"]
         assert "If-None-Match" not in headers
 

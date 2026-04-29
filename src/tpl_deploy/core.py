@@ -12,8 +12,7 @@ from .settings import RemoteInfo, Settings
 def register_remote(name: str, url: str | None) -> None:
     if url is None:
         if Catalog().get_remote_info(name) is None:
-            raise TplValueError(
-                f"Remote '{name}' is not registered. Provide a URL to register it.")
+            raise TplValueError(f"Remote '{name}' is not registered. Provide a URL to register it.")
         update_remote(name)
         return
 
@@ -90,18 +89,22 @@ def get_config() -> None:
         for alias, template_name in Settings.get_remote_aliases(remote_info.name).items():
             Logger.info(f"    alias: {alias} -> {template_name}")
 
+
 def set_default_editor(command) -> None:
     Settings.set_default_editor(command)
 
     Settings.save()
 
+
 def set_editor(language, os, command) -> None:
     Settings.set_editor(language, os, command)
     Settings.save()
-    
+
+
 def remove_editor(language, os) -> None:
     Settings.remove_editor(language, os)
     Settings.save()
+
 
 def set_alias(remote_name: str, template_name: str, alias: str) -> None:
     catalog = Catalog()
@@ -110,6 +113,7 @@ def set_alias(remote_name: str, template_name: str, alias: str) -> None:
     Settings.set_alias(remote_name, alias, template_name)
     Settings.save()
 
+
 def remove_alias(remote_name: str, alias: str) -> None:
     catalog = Catalog()
     if catalog.get_remote_info(remote_name) is None:
@@ -117,7 +121,8 @@ def remove_alias(remote_name: str, alias: str) -> None:
     Settings.remove_alias(remote_name, alias)
     Settings.save()
 
-def new_project(template_name: str, project_name: str | None,  params: list[str] | None) -> None:
+
+def new_project(template_name: str, project_name: str | None, params: list[str] | None) -> None:
     dest_dir = _get_dest_dir(template_name, project_name)
 
     leaf = dest_dir.name
@@ -139,6 +144,7 @@ def new_project(template_name: str, project_name: str | None,  params: list[str]
 def _is_valid_token(s: str) -> bool:
     return s != "" and all(ch.isalnum() or ch == "_" for ch in s)
 
+
 def _get_dest_dir(name: str, dest: str | None) -> pathlib.Path:
     cwd = pathlib.Path.cwd()
 
@@ -154,8 +160,9 @@ def _get_dest_dir(name: str, dest: str | None) -> pathlib.Path:
 
     if dest_dir.exists():
         raise DestinationExistsError(f"Destination '{dest_dir}' already exists.")
-    
+
     return dest_dir
+
 
 def _normalize_template_name(token: str) -> TemplateInfo:
     template_name: str | None = None

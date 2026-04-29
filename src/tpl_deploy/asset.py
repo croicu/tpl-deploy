@@ -71,7 +71,7 @@ class Asset:
 
         with ZipFile(asset_file_path, "r") as zip:
             zip.extractall(dest)
-        
+
     # Private methods
 
     def _fetch_asset(

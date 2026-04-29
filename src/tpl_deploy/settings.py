@@ -18,11 +18,7 @@ from .descriptors import classproperty
 from .error import TplValueError
 from .helpers import atomic_json_dump
 
-OSES = (
-    "windows",
-    "linux", 
-    "macos"
-)
+OSES = ("windows", "linux", "macos")
 
 
 @dataclass
@@ -35,6 +31,7 @@ class RemoteInfo(protocols.RemoteReference):
     def type(self) -> str:
         urlparse_result = urllib.parse.urlparse(self.url)
         return urlparse_result.scheme
+
 
 class Settings(metaclass=descriptors.ClassPropertyMeta):
     # Public
@@ -89,7 +86,7 @@ class Settings(metaclass=descriptors.ClassPropertyMeta):
 
         if language_editors.get(os, None):
             return language_editors[os]
-        
+
         return Settings.get_default_editor()
 
     @staticmethod
@@ -161,8 +158,9 @@ class Settings(metaclass=descriptors.ClassPropertyMeta):
                 cls._user_data_dir = pathlib.Path(env_user_data_dir)
             else:
                 cls._user_data_dir = pathlib.Path(
-                    platformdirs.user_data_dir(appname=cls.app_name, appauthor=False))
-                
+                    platformdirs.user_data_dir(appname=cls.app_name, appauthor=False)
+                )
+
         return cls._user_data_dir
 
     @user_data_dir.setter
@@ -177,7 +175,7 @@ class Settings(metaclass=descriptors.ClassPropertyMeta):
                 cls._temp_dir = pathlib.Path(env_temp_dir)
             else:
                 cls._temp_dir = pathlib.Path(tempfile.gettempdir())
-                
+
         return cls._temp_dir
 
     @temp_dir.setter
@@ -186,20 +184,19 @@ class Settings(metaclass=descriptors.ClassPropertyMeta):
 
     @descriptors.classproperty
     def resources_dir(cls) -> pathlib.Path:
-        if (cls._resources_dir is None):
-            
+        if cls._resources_dir is None:
             env_resources_dir = os.environ.get("TPL_DEPLOY_RESOURCES_DIR")
             if env_resources_dir is not None:
                 cls._resources_dir = pathlib.Path(env_resources_dir)
             else:
                 cls._resources_dir = pathlib.Path(importlib.resources.files("tpl_deploy"))
-                
+
         return cls._resources_dir
 
     @resources_dir.setter
     def resources_dir(cls, value: str | pathlib.Path):
         cls._resources_dir = pathlib.Path(value)
-        
+
     @descriptors.classproperty
     def catalog_dir(cls) -> pathlib.Path:
         return Settings.user_data_dir / "catalog"
@@ -207,7 +204,7 @@ class Settings(metaclass=descriptors.ClassPropertyMeta):
     @descriptors.classproperty
     def config_path(cls) -> pathlib.Path:
         return Settings.user_data_dir / "config.json"
-    
+
     @staticmethod
     @contextmanager
     def scratch_dir():
@@ -327,4 +324,3 @@ class Settings(metaclass=descriptors.ClassPropertyMeta):
     _resources_dir: pathlib.Path | None = None
     _temp_dir: pathlib.Path | None = None
     _defaults_enabled: bool = True
-

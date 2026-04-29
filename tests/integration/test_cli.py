@@ -19,15 +19,16 @@ class TestCLI:
     def test_list(self, tmp_path: Path, variables: Variables):
         args: list[str] = ["list"]
         debug = variables.bool("debug")
-        
+
         if debug:
             args.append("--debug")
 
         # tpl list
         result, stdout, stderr = self.run_tpl(args)
 
-        assert result == variables.int("expected_result"), \
+        assert result == variables.int("expected_result"), (
             f"Failed to list remotes. stdout: {stdout},\nstderr:\n{stderr}"
+        )
 
     def test_register(self, tmp_path: Path, variables: Variables):
         args: list[str] = ["register"]
@@ -48,20 +49,18 @@ class TestCLI:
             context = HttpPlayer(recording_file_name)
         else:
             context = nullcontext()
-        
-        with context:
 
+        with context:
             # tpl register test http://test.com
             result, stdout, stderr = self.run_tpl(args)
 
             if record:
                 context.save()
 
-        assert result == variables.int("expected_result"), \
-            f"Failed to register remote '{remote_name}'." \
-            f"\nstdout: {stdout},\nstderr:\n{stderr}"
+        assert result == variables.int("expected_result"), (
+            f"Failed to register remote '{remote_name}'.\nstdout: {stdout},\nstderr:\n{stderr}"
+        )
 
-    
     def test_unregister(self, tmp_path: Path, variables: Variables):
         args: list[str] = ["unregister"]
         remote_name = variables.str("remote_name")
@@ -76,9 +75,9 @@ class TestCLI:
             # tpl unregister test
             result, stdout, stderr = self.run_tpl(args)
 
-        assert result == variables.int("expected_result"), \
-            f"Failed to unregister remote '{remote_name}'." \
-            f"\nstdout: {stdout},\nstderr:\n{stderr}"
+        assert result == variables.int("expected_result"), (
+            f"Failed to unregister remote '{remote_name}'.\nstdout: {stdout},\nstderr:\n{stderr}"
+        )
 
     def test_update(self, tmp_path: Path, variables: Variables):
         args: list[str] = ["update"]
@@ -108,9 +107,9 @@ class TestCLI:
                 if record:
                     context.save()
 
-        assert result == variables.int("expected_result"), \
-            f"Failed to update remote '{remote_name}'." \
-            f"\nstdout: {stdout},\nstderr:\n{stderr}"
+        assert result == variables.int("expected_result"), (
+            f"Failed to update remote '{remote_name}'.\nstdout: {stdout},\nstderr:\n{stderr}"
+        )
 
     def test_unregister_last(self, tmp_path: Path, variables: Variables):
         args: list[str] = ["unregister"]
@@ -135,10 +134,10 @@ class TestCLI:
         # tpl config show
         result, stdout, stderr = self.run_tpl(args, external=False, temp_path=tmp_path)
 
-        assert result == variables.int("expected_result"), \
-            f"Failed to show config values." \
-            f"\nstdout: {stdout},\nstderr:\n{stderr}"
-        
+        assert result == variables.int("expected_result"), (
+            f"Failed to show config values.\nstdout: {stdout},\nstderr:\n{stderr}"
+        )
+
     def test_config_set_default_editor(self, tmp_path: Path, variables: Variables):
         args: list[str] = ["config", "set-default-editor"]
         command = variables.str("command")
@@ -147,12 +146,13 @@ class TestCLI:
         if debug:
             args.append("--debug")
         args.append(command)
-        
+
         # tpl config set-default-editor <command>
         result, stdout, stderr = self.run_tpl(args, external=False, temp_path=tmp_path)
 
-        assert result == variables.int("expected_result"), \
+        assert result == variables.int("expected_result"), (
             f"Failed to set default editor to '{command}'."
+        )
 
         self.test_config_show(tmp_path, variables)
 
@@ -169,8 +169,9 @@ class TestCLI:
 
         # tpl config set-editor <language> <os> <command>
         result, stdout, stderr = self.run_tpl(args, external=False, temp_path=tmp_path)
-        assert result == variables.int("expected_result"), \
+        assert result == variables.int("expected_result"), (
             f"Failed to set editor for language '{language}' on OS '{os}' to '{command}'."
+        )
 
         self.test_config_show(tmp_path, variables)
 
@@ -187,8 +188,9 @@ class TestCLI:
         # tpl config remove-editor <scope> <os>
         result, stdout, stderr = self.run_tpl(args, external=False, temp_path=tmp_path)
 
-        assert result == variables.int("expected_result"), \
+        assert result == variables.int("expected_result"), (
             f"Failed to remove editor for language '{language}' on OS '{os}'."
+        )
 
         self.test_config_show(tmp_path, variables)
 
@@ -206,8 +208,9 @@ class TestCLI:
         # tpl config set-alias <remote> <template_name> <alias>
         result, stdout, stderr = self.run_tpl(args, external=False, temp_path=tmp_path)
 
-        assert result == variables.int("expected_result"), \
+        assert result == variables.int("expected_result"), (
             f"Failed to set alias '{alias}' for '{template_name}' on remote '{remote_name}'."
+        )
 
         self.test_config_show(tmp_path, variables)
 
@@ -224,8 +227,9 @@ class TestCLI:
         # tpl config remove-alias <remote> <alias>
         result, stdout, stderr = self.run_tpl(args, external=False, temp_path=tmp_path)
 
-        assert result == variables.int("expected_result"), \
+        assert result == variables.int("expected_result"), (
             f"Failed to remove alias '{alias}' on remote '{remote_name}'."
+        )
 
         self.test_config_show(tmp_path, variables)
 
@@ -244,19 +248,16 @@ class TestCLI:
         with HttpPlayer("default_register"):
             result, stdout, stderr = self.run_tpl(args)
 
-        assert result == variables.int("expected_result"), \
-            f"Failed to create new project '{project_name}' from template '{template_alias}'." \
+        assert result == variables.int("expected_result"), (
+            f"Failed to create new project '{project_name}' from template '{template_alias}'."
             f"\nstdout: {stdout},\nstderr:\n{stderr}"
+        )
 
     # Private methods
 
     @contextlib.contextmanager
     def _register_with_capture(
-        self, 
-        remote_name: str, 
-        remote_url: str, 
-        debug: bool, 
-        unregister: bool = False
+        self, remote_name: str, remote_url: str, debug: bool, unregister: bool = False
     ):
         args: list[str] = ["register"]
         recording_file_name = remote_name + "_register"
@@ -267,9 +268,10 @@ class TestCLI:
 
         with HttpPlayer(recording_file_name):
             result, stdout, stderr = self.run_tpl(args)
-            assert result == 0, \
-                f"Failed to register remote '{remote_name}' for test setup." \
+            assert result == 0, (
+                f"Failed to register remote '{remote_name}' for test setup."
                 f"\nstdout: {stdout},\nstderr:\n{stderr}"
+            )
 
         yield
 
@@ -282,12 +284,9 @@ class TestCLI:
 
     @staticmethod
     def run_tpl(
-        args: list[str], 
-        *, 
-        external: bool = False, 
-        temp_path: Path | None = None
+        args: list[str], *, external: bool = False, temp_path: Path | None = None
     ) -> tuple[int, str, str]:
-        
+
         if external:
             env = os.environ.copy()
             env["TPL_DEPLOY_USER_DATA_DIR"] = str(temp_path)
