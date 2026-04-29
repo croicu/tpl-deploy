@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tpl-deploy"
-version = "0.1.5"
+version = "0.1.6"
 description = "tpl CLI placeholder"
 authors = [{ name="Alexandru Croicu", email="cacroi18@outlook.com" }]
 readme = "README.md"
